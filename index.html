@@ -3,259 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>任乔洛 | 艺术总监</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
+    <title data-i18n="page_title">甘弦朋 | 个人主页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* 基础重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; /* Slate 900 */
+            color: #cbd5e1; /* Slate 300 */
+            overflow-x: hidden;
+        }
+        
+        /* 流动渐变极光背景 */
+        .aurora-bg {
+            background: linear-gradient(-45deg, #020617, #0f172a, #064e3b, #115e59);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #f8f9fa; /* 浅色明亮背景 */
-            color: #1a1a1a; /* 深灰色主文本 */
-            font-family: 'Noto Serif SC', serif;
-            overflow: hidden;
+        /* 滚动显现动画 (Scroll Reveal) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* 画布背景层 */
-        #bg-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.8;
-        }
-
-        /* 核心内容区 */
-        .content {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            /* 浅色边缘遮罩，让视觉中心更通透 */
-            background: radial-gradient(circle at center, transparent 0%, #f8f9fa 90%);
-            pointer-events: none;
-        }
-
-        /* 标题动画与鲜亮发光 */
-        h1 {
-            font-size: 5rem;
-            font-weight: 700;
-            letter-spacing: 0.8rem;
-            margin-bottom: 1rem;
-            color: #111;
-            /* 浅色背景下的亮蓝色呼吸光影 */
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* 副标题 */
-        .subtitle {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.2rem;
-            color: #666;
-            letter-spacing: 0.5rem;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            animation: fadeIn 2s ease-out 0.5s both;
-        }
-
-        /* 动态分割线 */
-        .divider {
-            width: 40px;
-            height: 2px;
-            background: #ccc;
-            margin: 0 auto 2.5rem;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: expand 1.5s ease-out 1s both;
-        }
-
-        /* 个人简介简语 */
-        .description {
-            color: #555;
-            font-size: 1.1rem;
-            letter-spacing: 0.1rem;
-            margin-bottom: 3.5rem;
-            animation: fadeIn 2s ease-out 1.5s both;
-        }
-
-        /* 探索按钮 */
-        .btn {
-            pointer-events: auto;
-            padding: 14px 40px;
-            border: 1px solid #1a1a1a;
-            color: #1a1a1a;
-            text-decoration: none;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.2rem;
+        /* 卡片悬浮发光交互 */
+        .glow-card {
             transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 2s ease-out 2s both;
-            background: transparent;
-            cursor: pointer;
+            border: 1px solid #334155; /* Slate 700 */
+            background: rgba(30, 41, 59, 0.7); /* Slate 800 半透明 */
+            backdrop-filter: blur(10px);
+        }
+        .glow-card:hover {
+            box-shadow: 0 0 25px rgba(45, 212, 191, 0.25);
+            border-color: rgba(45, 212, 191, 0.6);
+            transform: translateY(-6px);
         }
 
-        /* 按钮扫光特效 */
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 110, 255, 0.1), transparent);
-            transition: all 0.4s ease;
+        /* 文字渐变高光 */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #2dd4bf, #34d399);
         }
 
-        .btn:hover {
-            color: #fff;
-            border-color: #006eff;
-            background-color: #006eff;
-            box-shadow: 0 5px 20px rgba(0, 110, 255, 0.4);
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        /* 悬停内容区时，分割线拉长并变为亮色 */
-        .content:hover .divider {
-            width: 120px;
-            background: #006eff;
-            box-shadow: 0 0 15px rgba(0, 110, 255, 0.6);
-        }
-
-        /* 关键帧动画：光影悬浮呼吸 */
-        @keyframes float {
-            0%, 100% { 
-                transform: translateY(0); 
-                text-shadow: 0 0 15px rgba(0, 110, 255, 0.1);
-            }
-            50% { 
-                transform: translateY(-8px); 
-                /* 发出鲜亮的蓝色呼吸光 */
-                text-shadow: 0 10px 30px rgba(0, 110, 255, 0.45); 
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes expand {
-            from { width: 0; opacity: 0; }
-            to { width: 40px; opacity: 1; }
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 3rem; letter-spacing: 0.5rem; }
-            .subtitle { font-size: 1rem; letter-spacing: 0.3rem; }
-        }
+        /* 针对下拉框重置 */
+        select option { color: #cbd5e1; background: #1e293b; }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <canvas id="bg-canvas"></canvas>
+    <nav class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-lg">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <span data-i18n="nav_name" class="text-xl font-bold text-gradient tracking-wide">甘弦朋</span>
+            <div class="flex items-center space-x-4 md:space-x-6 text-sm font-medium">
+                <a href="#about" data-i18n="nav_about" class="hover:text-teal-400 transition hidden md:inline-block">关于我</a>
+                <a href="#research" data-i18n="nav_research" class="hover:text-teal-400 transition hidden md:inline-block">研究</a>
+                <a href="#projects" data-i18n="nav_projects" class="hover:text-teal-400 transition hidden md:inline-block">项目</a>
+                <a href="#contact" data-i18n="nav_contact" class="hover:text-teal-400 transition hidden md:inline-block">联系</a>
+                
+                <select id="lang-switch" class="bg-transparent border border-slate-600 text-slate-300 py-1 px-2 rounded-md focus:outline-none focus:border-teal-400 cursor-pointer hover:text-teal-400 transition">
+                    <option value="zh">中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                </select>
+            </div>
+        </div>
+    </nav>
 
-    <div class="content">
-        <h1>任乔洛</h1>
-        <p class="subtitle">Art Director / 艺术总监</p>
-        <div class="divider"></div>
-        <p class="description">探索艺术的边界，重构音乐的灵魂。？好装啊这句话或者放别的话</p>
-        <p class="description">**再放点自我介绍在这里？**</p>
-        <a href="#" class="btn" onclick="alert('详细内容还没写，等会儿，先吃个饭，然后跟钟宝宝周末出去度假休息，'); return false;">ENTER PORTFOLIO</a>
-    </div>
+    <header id="about" class="aurora-bg py-24 text-white relative border-b border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12 relative z-10 reveal">
+            <div class="w-44 h-44 rounded-full bg-slate-800/50 border-2 border-teal-400/50 p-1 shadow-[0_0_30px_rgba(45,212,191,0.3)]">
+                <img src="gan.jpg" alt="GAN" class="w-full h-full object-cover rounded-full">
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h1 data-i18n="hero_title" class="text-4xl md:text-5xl font-extrabold mb-4 text-white">你好，我是 <span class="text-gradient">[甘弦朋]</span></h1>
+                <p data-i18n="hero_desc" class="text-lg text-slate-300 mb-8 max-w-2xl leading-relaxed">
+                    目前专注于乐器表现（钢琴）的学科研究。我热衷于探索如何利用深度学习技术来理解和创造艺术。
+                </p>
+                <div class="flex justify-center md:justify-start gap-5">
+                    <a href="https://github.com" class="bg-slate-800 text-white border border-slate-600 px-6 py-2.5 rounded-full font-medium hover:bg-slate-700 hover:border-teal-400 transition-all shadow-lg flex items-center"><i class="fab fa-github mr-2"></i>GitHub</a>
+                    <a href="mailto:gan1020097573@gmail.com" class="bg-teal-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-teal-500 hover:shadow-[0_0_15px_rgba(45,212,191,0.5)] transition-all flex items-center"><i class="fas fa-envelope mr-2"></i>Email</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-20 space-y-24">
+
+        <section id="research" class="reveal">
+            <div class="flex items-center mb-10">
+                <div class="w-2 h-8 bg-teal-500 rounded-full mr-4 shadow-[0_0_10px_rgba(45,212,191,0.5)]"></div>
+                <h2 data-i18n="research_title" class="text-3xl font-bold text-white">研究兴趣</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glow-card p-8 rounded-2xl">
+                    <div class="w-14 h-14 bg-teal-900/50 text-teal-400 rounded-xl flex items-center justify-center mb-6 border border-teal-500/30">
+                        <i class="fas fa-music text-2xl"></i>
+                    </div>
+                    <h3 data-i18n="res1_title" class="font-bold text-xl mb-3 text-white">器乐表现（钢琴）研究</h3>
+                    <p data-i18n="res1_desc" class="text-slate-400 text-sm leading-relaxed">艺术实践与学术研究深度结合，致力于钢琴演奏艺术的精进，并从学术视角探索音乐诠释的理论逻辑与创新边界。</p>
+                </div>
+                <div class="glow-card p-8 rounded-2xl">
+                    <div class="w-14 h-14 bg-emerald-900/50 text-emerald-400 rounded-xl flex items-center justify-center mb-6 border border-emerald-500/30">
+                        <i class="fas fa-microchip text-2xl"></i>
+                    </div>
+                    <h3 data-i18n="res2_title" class="font-bold text-xl mb-3 text-white">作曲（乐书）研究</h3>
+                    <p data-i18n="res2_desc" class="text-slate-400 text-sm leading-relaxed">立足于作曲技法与乐谱文献，研究音乐结构的内在逻辑及其在当代技术环境下的生成机制。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="publications" class="reveal">
+            <div class="flex items-center mb-10">
+                <div class="w-2 h-8 bg-emerald-500 rounded-full mr-4 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                <h2 data-i18n="pub_title" class="text-3xl font-bold text-white">近期论文</h2>
+            </div>
+            <div class="space-y-6">
+                <div class="p-6 glow-card rounded-xl flex flex-col items-start relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-teal-500"></div>
+                    <span data-i18n="pub_status" class="text-xs font-bold uppercase tracking-wider text-teal-300 px-3 py-1 bg-teal-900/40 border border-teal-500/30 rounded-full mb-3">审查中</span>
+                    <h3 class="font-bold text-lg text-white mb-2">[Invalid Noise Ratio: An Artifact-Aware Evaluation Metric for AI-Generated Chiptune Music]</h3>
+                    <p data-i18n="pub_desc" class="text-slate-400 text-sm">无效噪声比：一种面向 AI 生成芯片音乐的伪影感知评价指标.</p>
+                </div>
+
+                <div class="p-6 glow-card rounded-xl flex flex-col items-start relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                    <span data-i18n="pub2_status" class="text-xs font-bold uppercase tracking-wider text-emerald-300 px-3 py-1 bg-emerald-900/40 border border-emerald-500/30 rounded-full mb-3">已发表（校内）</span>
+                    <h3 class="font-bold text-lg text-white mb-2">["Public Glory" and "Private Monologue": Analysis and Interpretation of Two Piano Works by Mikhail Ivanovich Glinka]</h3>
+                    <p data-i18n="pub2_desc" class="text-slate-400 text-sm">「公的荣耀」与「私的独白」：米哈伊尔.伊万诺维奇.格林卡的二首钢琴作品分析与解读</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="reveal">
+            <div class="flex items-center mb-10">
+                <div class="w-2 h-8 bg-teal-500 rounded-full mr-4 shadow-[0_0_10px_rgba(45,212,191,0.5)]"></div>
+                <h2 data-i18n="projects_title" class="text-3xl font-bold text-white">近期专案</h2>
+            </div>
+            <div class="space-y-6">
+                <div class="p-6 glow-card rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <h3 class="font-bold text-xl text-white flex items-center gap-2" data-i18n="proj1_title">柔情趁年少</h3>
+                        <p class="text-sm text-slate-400 mt-2" data-i18n="proj1_roles">作词：张哲凯 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋</p>
+                        <p class="text-teal-400 text-sm mt-3 italic" data-i18n="proj1_desc">“尽管聚散与成长都是常道”</p>
+                    </div>
+                    <button disabled class="shrink-0 px-8 py-2 bg-slate-800 text-slate-500 rounded-full cursor-not-allowed font-medium text-sm border border-slate-700" data-i18n="btn_listen">试听</button>
+                </div>
+
+                <div class="p-6 glow-card rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <h3 class="font-bold text-xl text-white flex items-center gap-2" data-i18n="proj2_title">呢喃</h3>
+                        <p class="text-sm text-slate-400 mt-2" data-i18n="proj2_roles">作词：舒彦童 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋</p>
+                        <p class="text-teal-400 text-sm mt-3 italic" data-i18n="proj2_desc">“泛黄的相册与漫天的落叶”</p>
+                    </div>
+                    <button disabled class="shrink-0 px-8 py-2 bg-slate-800 text-slate-500 rounded-full cursor-not-allowed font-medium text-sm border border-slate-700" data-i18n="btn_listen">试听</button>
+                </div>
+
+                <div id="hidden-project" class="hidden">
+                    <div class="p-6 glow-card rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div>
+                            <h3 class="font-bold text-xl text-white flex items-center gap-2" data-i18n="proj3_title">孤独盆栽</h3>
+                            <p class="text-sm text-slate-400 mt-2" data-i18n="proj3_roles">作词：任乔洛 | 作曲：任乔洛 | 编曲：甘弦朋 | 制作人：钟其高</p>
+                            <p class="text-teal-400 text-sm mt-3 italic" data-i18n="proj3_desc">“困于方寸，向光而生。无人问津，独自盛放”</p>
+                        </div>
+                        <button disabled class="shrink-0 px-8 py-2 bg-slate-800 text-slate-500 rounded-full cursor-not-allowed font-medium text-sm border border-slate-700" data-i18n="btn_listen">试听</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button id="show-more-btn" class="px-8 py-2.5 bg-transparent border border-teal-500/50 text-teal-400 rounded-full hover:bg-teal-500/10 hover:border-teal-400 transition-all font-medium text-sm" data-i18n="btn_show_more">显示更多</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="contact" class="bg-[#020617] text-white py-12 text-center border-t border-slate-800">
+        <p data-i18n="footer_text" class="text-slate-500 mb-6 text-sm">© 2026 [甘弦朋]. 基于 GitHub Pages 构建.</p>
+        <div class="flex justify-center gap-8">
+            <a href="#" class="text-slate-500 hover:text-teal-400 transition text-2xl hover:scale-110 transform"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="text-slate-500 hover:text-teal-400 transition text-2xl hover:scale-110 transform"><i class="fab fa-twitter"></i></a>
+        </div>
+    </footer>
 
     <script>
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 1.5 + 0.5; 
-                this.speedX = (Math.random() - 0.5) * 0.8; 
-                this.speedY = (Math.random() - 0.5) * 0.8; 
-                this.opacity = Math.random() * 0.6 + 0.2;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > width) this.speedX *= -1;
-                if (this.y < 0 || this.y > height) this.speedY *= -1;
-            }
-            draw() {
-                // 将粒子修改为鲜亮的蓝色系，使其在浅色背景中可见
-                ctx.fillStyle = `rgba(0, 110, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function init() {
-            particles = [];
-            let particleCount = Math.floor(window.innerWidth / 10); 
-            if(particleCount > 120) particleCount = 120; 
-            
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            
-            for(let i = 0; i < particles.length; i++) {
-                for(let j = i; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 130) {
-                        ctx.beginPath();
-                        // 连线也同样使用亮蓝色，根据距离控制透明度
-                        ctx.strokeStyle = `rgba(0, 110, 255, ${0.2 - distance/650})`;
-                        ctx.lineWidth = 0.8;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+        // ======= 滚动视差展示 (Scroll Reveal) 逻辑 =======
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
                 }
             }
-            requestAnimationFrame(animate);
+        }
+        window.addEventListener("scroll", reveal);
+        // 初始化执行一次
+        reveal();
+        // ===================================
+
+        // 多语言切换及其他逻辑保持不变
+        const translations = {
+            zh: {
+                page_title: "甘弦朋 | 个人主页",
+                nav_name: "甘弦朋",
+                nav_about: "关于我",
+                nav_research: "研究",
+                nav_projects: "项目",
+                nav_contact: "联系",
+                hero_title: "你好，我是 <span class='text-gradient'>[甘弦朋]</span>",
+                hero_desc: "目前专注于乐器表现（钢琴）的学科研究。我热衷于探索如何利用深度学习技术来理解和创造艺术。",
+                research_title: "研究兴趣",
+                res1_title: "器乐表现（钢琴）研究",
+                res1_desc: "艺术实践与学术研究深度结合，致力于钢琴演奏艺术的精进，并从学术视角探索音乐诠释的理论逻辑与创新边界。",
+                res2_title: "作曲（乐书）研究",
+                res2_desc: "立足于作曲技法与乐谱文献，研究音乐结构的内在逻辑及其在当代技术环境下的生成机制。",
+                pub_title: "近期论文",
+                pub_status: "审查中",
+                pub_desc: "无效噪声比：一种面向 AI 生成芯片音乐的伪影感知评价指标.",
+                pub2_status: "已发表（校内）",
+                pub2_desc: "「公的荣耀」与「私的独白」：米哈伊尔.伊万诺维奇.格林卡的二首钢琴作品分析与解读",
+                projects_title: "近期专案",
+                proj1_title: "柔情趁年少",
+                proj1_roles: "作词：张哲凯 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋",
+                proj1_desc: "“尽管聚散与成长都是常道”",
+                proj2_title: "呢喃",
+                proj2_roles: "作词：舒彦童 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋",
+                proj2_desc: "“泛黄的相册与漫天的落叶”",
+                proj3_title: "孤独盆栽",
+                proj3_roles: "作词：任乔洛 | 作曲：任乔洛 | 编曲：甘弦朋 | 制作人：钟其高",
+                proj3_desc: "“困于方寸，向光而生。无人问津，独自盛放。”",
+                btn_listen: "试听",
+                btn_show_more: "显示更多",
+                footer_text: "© 2026 [甘弦朋]. 基于 GitHub Pages 构建."
+            },
+            en: {
+                page_title: "Gan Xianpeng | Portfolio",
+                nav_name: "Gan Xianpeng",
+                nav_about: "About",
+                nav_research: "Research",
+                nav_projects: "Projects",
+                nav_contact: "Contact",
+                hero_title: "Hi, I am <span class='text-gradient'>[Gan Xianpeng]</span>",
+                hero_desc: "Currently focusing on academic research in instrumental performance (piano). I am passionate about exploring how to use deep learning technologies to understand and create art.",
+                research_title: "Research Interests",
+                res1_title: "Instrumental Performance (Piano)",
+                res1_desc: "Combining artistic practice with academic research, dedicated to refining piano performance art, and exploring the theoretical logic and innovative boundaries of musical interpretation.",
+                res2_title: "Composition (Musical Scores)",
+                res2_desc: "Based on composition techniques and musical score literature, researching the internal logic of musical structures and their generation mechanisms in contemporary technological environments.",
+                pub_title: "Recent Publications",
+                pub_status: "Under Review",
+                pub_desc: "Invalid Noise Ratio: An Artifact-Aware Evaluation Metric for AI-Generated Chiptune Music.",
+                pub2_status: "Published (Internal)",
+                pub2_desc: "“Public Glory” and “Private Monologue”: Analysis and Interpretation of Two Piano Works by Mikhail Ivanovich Glinka",
+                projects_title: "Recent Projects",
+                proj1_title: "Tenderness while young",
+                proj1_roles: "Lyricist: Zhang Zhekai | Composer: Gan Xianpeng | Arranger: Gan Xianpeng | Producer: Gan Xianpeng",
+                proj1_desc: "“Although gathering, parting, and growing up are the norm”",
+                proj2_title: "Whisper",
+                proj2_roles: "Lyricist: Shu Yantong | Composer: Gan Xianpeng | Arranger: Gan Xianpeng | Producer: Gan Xianpeng",
+                proj2_desc: "“Yellowing photo albums and falling leaves”",
+                proj3_title: "Lonely Potted Plant",
+                proj3_roles: "Lyricist: Ren Qiaoluo | Composer: Ren Qiaoluo | Arranger: Gan Xianpeng | Producer: Zhong Qigao",
+                proj3_desc: "“Trapped in a square inch, growing towards the light,unnoticed and blooming alone.”",
+                btn_listen: "Listen",
+                btn_show_more: "Show More",
+                footer_text: "© 2026 [Gan Xianpeng]. Built with GitHub Pages."
+            },
+            ja: {
+                page_title: "甘弦朋 | 個人ポートフォリオ",
+                nav_name: "甘弦朋",
+                nav_about: "私について",
+                nav_research: "研究",
+                nav_projects: "プロジェクト",
+                nav_contact: "お問い合わせ",
+                hero_title: "こんにちは、<span class='text-gradient'>[甘弦朋]</span>です",
+                hero_desc: "現在、楽器演奏（ピアノ）の学術研究に専念しています。ディープラーニング技術を活用して芸術を理解し、創造することに情熱を注いでいます。",
+                research_title: "研究の関心",
+                res1_title: "器楽演奏（ピアノ）研究",
+                res1_desc: "芸術的実践と学術研究を深く結びつけ、ピアノ演奏芸術の探求に専念し、学術的な視点から音楽解釈の理論的論理と革新の境界を探求します。",
+                res2_title: "作曲（楽譜）研究",
+                res2_desc: "作曲技法と楽譜文献に基づいて、音楽構造の内部論理と現代の技術環境下での生成メカニズムを研究します。",
+                pub_title: "最近の論文",
+                pub_status: "査読中",
+                pub_desc: "無効ノイズ比：AI生成チップチューン音楽のためのアーティファクトを考慮した評価指標.",
+                pub2_status: "発表済み（学内）",
+                pub2_desc: "「公の栄光」と「私の独白」：ミハイル・イヴァノヴィチ・グリンカの2つのピアノ作品の分析と解釈",
+                projects_title: "最近のプロジェクト",
+                proj1_title: "Tenderness while young",
+                proj1_roles: "作詞：張哲凱 | 作曲：甘弦朋 | 編曲：甘弦朋 | プロデューサー：甘弦朋",
+                proj1_desc: "「出会いと別れ、そして成長は常であるとはいえ」",
+                proj2_title: "囁き (呢喃)",
+                proj2_roles: "作詞：舒彦童 | 作曲：甘弦朋 | 編曲：甘弦朋 | プロデューサー：甘弦朋",
+                proj2_desc: "「色褪せたアルバムと空一面の落ち葉」",
+                proj3_title: "孤独な盆栽",
+                proj3_roles: "作詞：任喬洛 | 作曲：任喬洛 | 編曲：甘弦朋 | プロデューサー：鐘其高",
+                proj3_desc: "「小さな空間に囚われ、光に向かって生き.誰にも気付かれず、一人咲き誇る。」",
+                btn_listen: "試聴",
+                btn_show_more: "さらに表示",
+                footer_text: "© 2026 [甘弦朋]. GitHub Pages で構築."
+            }
+        };
+
+        const langSwitch = document.getElementById('lang-switch');
+
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    // 使用 innerHTML 处理可能带标签的翻译内容（如：<span class='text-gradient'>）
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
         }
 
-        init();
-        animate();
+        langSwitch.addEventListener('change', (e) => {
+            updateLanguage(e.target.value);
+        });
+
+        const showMoreBtn = document.getElementById('show-more-btn');
+        const hiddenProject = document.getElementById('hidden-project');
+        
+        if (showMoreBtn && hiddenProject) {
+            showMoreBtn.addEventListener('click', () => {
+                hiddenProject.classList.remove('hidden');
+                showMoreBtn.style.display = 'none';
+                
+                // 给新展出的内容加一个小延迟使其触发 reveal 动画
+                setTimeout(() => {
+                    reveal();
+                }, 50);
+            });
+        }
     </script>
 </body>
 </html>
