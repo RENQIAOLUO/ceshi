@@ -13,6 +13,7 @@
             background-color: #f8fafc; /* Slate 50 */
             color: #334155; /* Slate 700 */
             overflow-x: hidden;
+            position: relative;
         }
 
         /* 自定义平滑滚动条 */
@@ -21,13 +22,24 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* 左侧流体动画背景 */
+        /* ========= 新增：全屏流星雨背景 Canvas ========= */
+        #meteor-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10; /* 确保在所有内容最底层 */
+            pointer-events: none; /* 穿透点击，不干扰内容交互 */
+        }
+        /* ============================================= */
+
+        /* 左侧流体动画背景 (在 Canvas 之上，毛玻璃之下) */
         .blob-bg {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             overflow: hidden;
-            z-index: 0;
-            background: #ffffff;
+            z-index: 1; /* 比 Canvas 高，比毛玻璃低 */
         }
         .blob-1, .blob-2 {
             position: absolute;
@@ -74,6 +86,8 @@
             border: 1px solid #f1f5f9;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 10; /* 确保卡片在 Canvas 之上 */
         }
         .elegant-card:hover {
             transform: translateY(-8px);
@@ -125,6 +139,7 @@
 </head>
 <body class="antialiased flex flex-col lg:flex-row min-h-screen">
 
+    <canvas id="meteor-canvas"></canvas>
     <aside class="relative w-full lg:w-[35%] lg:fixed lg:h-screen border-r border-slate-200">
         <div class="blob-bg hidden lg:block">
             <div class="blob-1"></div>
@@ -133,28 +148,28 @@
         
         <div class="glass-panel h-full flex flex-col justify-between p-8 md:p-12 lg:p-16">
             <div>
-                <div class="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden shadow-2xl mb-8 border border-white/60 transform rotate-3 hover:rotate-0 transition duration-500">
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden shadow-2xl mb-8 border border-white/60 transform rotate-3 hover:rotate-0 transition duration-500 relative z-20">
                     <img src="gan.jpg" alt="GAN" class="w-full h-full object-cover">
                 </div>
                 
-                <h1 data-i18n="hero_title" class="text-3xl md:text-4xl font-extrabold mb-6 tracking-tight text-slate-900">你好，我是 <span class="text-gradient">[甘弦朋]</span></h1>
-                <p data-i18n="hero_desc" class="text-slate-600 leading-relaxed mb-10 text-sm md:text-base">
+                <h1 data-i18n="hero_title" class="text-3xl md:text-4xl font-extrabold mb-6 tracking-tight text-slate-900 relative z-20">你好，我是 <span class="text-gradient">[甘弦朋]</span></h1>
+                <p data-i18n="hero_desc" class="text-slate-600 leading-relaxed mb-10 text-sm md:text-base relative z-20">
                     目前专注于乐器表现（钢琴）的学科研究。我热衷于探索如何利用深度学习技术来理解和创造艺术。
                 </p>
 
-                <nav class="hidden lg:flex flex-col space-y-4 mb-10 font-semibold text-sm">
+                <nav class="hidden lg:flex flex-col space-y-4 mb-10 font-semibold text-sm relative z-20">
                     <a href="#research" class="text-slate-400 hover:text-indigo-600 transition flex items-center group"><span class="w-4 h-[2px] bg-slate-300 mr-3 group-hover:w-8 group-hover:bg-indigo-600 transition-all"></span> <span data-i18n="nav_research">研究</span></a>
                     <a href="#publications" class="text-slate-400 hover:text-indigo-600 transition flex items-center group"><span class="w-4 h-[2px] bg-slate-300 mr-3 group-hover:w-8 group-hover:bg-indigo-600 transition-all"></span> <span data-i18n="pub_title">近期论文</span></a>
                     <a href="#projects" class="text-slate-400 hover:text-indigo-600 transition flex items-center group"><span class="w-4 h-[2px] bg-slate-300 mr-3 group-hover:w-8 group-hover:bg-indigo-600 transition-all"></span> <span data-i18n="nav_projects">项目</span></a>
                 </nav>
 
-                <div class="flex gap-4">
+                <div class="flex gap-4 relative z-20">
                     <a href="https://github.com" class="bg-slate-900 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-indigo-600 transition shadow-lg"><i class="fab fa-github"></i></a>
                     <a href="mailto:gan1020097573@gmail.com" class="bg-white border border-slate-200 text-slate-700 w-10 h-10 rounded-full flex items-center justify-center hover:text-indigo-600 hover:border-indigo-200 transition shadow-sm"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
 
-            <div class="mt-12 lg:mt-0">
+            <div class="mt-12 lg:mt-0 relative z-20">
                 <div class="segment-control" id="lang-switch-container">
                     <div class="segment-indicator" id="segment-indicator"></div>
                     <button class="segment-btn active" data-lang="zh">中文</button>
@@ -194,7 +209,7 @@
                     <div class="elegant-card p-8 rounded-3xl">
                         <span data-i18n="pub_status" class="inline-block text-[10px] font-bold uppercase tracking-widest text-indigo-600 px-3 py-1 bg-indigo-50 rounded-full mb-4">审查中</span>
                         <h3 class="font-bold text-lg text-slate-900 mb-3 leading-snug">[Invalid Noise Ratio: An Artifact-Aware Evaluation Metric for AI-Generated Chiptune Music]</h3>
-                        <p data-i18n="pub_desc" class="text-slate-500 text-sm">无效噪声比：一种面向 AI 生成芯片音乐的伪影感知评价指标.</p>
+                        <p data-i18n="pub_desc" class="text-slate-500 text-sm">无效噪声比：一种面向 AI 生成芯片音乐的伪影感知评价指标.", pub_desc: "Invalid Noise Ratio: An Artifact-Aware Evaluation Metric for AI-Generated Chiptune Music.</p>
                     </div>
 
                     <div class="elegant-card p-8 rounded-3xl">
@@ -239,7 +254,7 @@
                 </div>
 
                 <div class="mt-10">
-                    <button id="show-more-btn" class="flex items-center text-sm font-semibold text-indigo-600 hover:text-fuchsia-500 transition-colors group">
+                    <button id="show-more-btn" class="flex items-center text-sm font-semibold text-indigo-600 hover:text-fuchsia-500 transition-colors group relative z-20">
                         <span data-i18n="btn_show_more">显示更多</span>
                         <i class="fas fa-arrow-down ml-2 group-hover:translate-y-1 transition-transform"></i>
                     </button>
@@ -247,7 +262,7 @@
             </section>
             
             <footer id="contact" class="pt-20 border-t border-slate-200">
-                <p data-i18n="footer_text" class="text-slate-400 text-sm">© 2026 [甘弦朋]. 基于 GitHub Pages 构建.</p>
+                <p data-i18n="footer_text" class="text-slate-400 text-sm relative z-20">© 2026 [甘弦朋]. 基于 GitHub Pages 构建.</p>
             </footer>
         </div>
     </main>
@@ -343,7 +358,7 @@
                 projects_title: "最近のプロジェクト",
                 proj1_title: "Tenderness while young",
                 proj1_roles: "作詞：張哲凱 | 作曲：甘弦朋 | 編曲：甘弦朋 | プロデューサー：甘弦朋",
-                proj1_desc: "「出会いと別れ、そして成長は常であるとはいえ」",
+                proj1_desc: "「出会いと别れ、そして成長は常であるとはいえ」",
                 proj2_title: "囁き (呢喃)",
                 proj2_roles: "作詞：舒彦童 | 作曲：甘弦朋 | 編曲：甘弦朋 | プロデューサー：甘弦朋",
                 proj2_desc: "「色褪せたアルバムと空一面の落ち葉」",
@@ -417,6 +432,75 @@
         document.querySelectorAll('.reveal-item').forEach(el => {
             observer.observe(el);
         });
+
+        // ======= 新增：全屏流星雨背景 Canvas 渲染 =======
+        const canvas = document.getElementById('meteor-canvas');
+        const ctx = canvas.getContext('2d');
+        let meteors = [];
+        let numMeteors = 100; // 流星数量
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Meteor {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.x = Math.random() * canvas.width * 2 - canvas.width; // 随机 X，范围更广以覆盖整个屏幕
+                this.y = Math.random() * -canvas.height; // 随机 Y，在屏幕上方
+                this.speed = Math.random() * 5 + 3; // 随机速度
+                this.length = Math.random() * 80 + 20; // 随机长度
+                this.opacity = Math.random(); // 随机不透明度
+                this.size = Math.random() * 2 + 1; // 随机粗细
+                // 浅蓝色色调：r=102, g=178, b=255 -> 0.4*r, 0.7*g, 1.0*b -> r=102*0.4, g=178*0.7, b=255*1.0
+                const blueBase = [102, 178, 255];
+                this.color = `rgba(${blueBase[0] * 0.4}, ${blueBase[1] * 0.7}, ${blueBase[2] * 1.0}, ${this.opacity})`;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + this.length, this.y + this.length);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = this.size;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+
+            update() {
+                this.x += this.speed;
+                this.y += this.speed;
+
+                // 如果流星移出屏幕，则重新初始化
+                if (this.x > canvas.width || this.y > canvas.height) {
+                    this.init();
+                }
+            }
+        }
+
+        function createMeteors() {
+            for (let i = 0; i < numMeteors; i++) {
+                meteors.push(new Meteor());
+            }
+        }
+
+        function animateMeteors() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空 Canvas
+            for (let i = 0; i < meteors.length; i++) {
+                meteors[i].draw();
+                meteors[i].update();
+            }
+            requestAnimationFrame(animateMeteors);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        createMeteors();
+        animateMeteors();
     </script>
 </body>
 </html>
