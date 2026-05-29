@@ -6,215 +6,254 @@
     <title data-i18n="page_title">甘弦朋 | 个人主页</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #0f172a; /* Slate 900 */
-            color: #cbd5e1; /* Slate 300 */
+            background-color: #f8fafc; /* Slate 50 */
+            color: #334155; /* Slate 700 */
             overflow-x: hidden;
         }
-        
-        /* 流动渐变极光背景 */
-        .aurora-bg {
-            background: linear-gradient(-45deg, #020617, #0f172a, #064e3b, #115e59);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+
+        /* 自定义平滑滚动条 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* 左侧流体动画背景 */
+        .blob-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: #ffffff;
         }
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .blob-1, .blob-2 {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: moveBlobs 12s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blob-1 {
+            width: 300px; height: 300px;
+            background: #e0e7ff; /* Indigo 100 */
+            top: -50px; left: -50px;
+        }
+        .blob-2 {
+            width: 400px; height: 400px;
+            background: #fce7f3; /* Pink 100 */
+            bottom: -100px; right: -50px;
+            animation-delay: -5s;
+        }
+        @keyframes moveBlobs {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
         }
 
-        /* 滚动显现动画 (Scroll Reveal) */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
+        /* 内容前景毛玻璃 */
+        .glass-panel {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
-        /* 卡片悬浮发光交互 */
-        .glow-card {
-            transition: all 0.4s ease;
-            border: 1px solid #334155; /* Slate 700 */
-            background: rgba(30, 41, 59, 0.7); /* Slate 800 半透明 */
-            backdrop-filter: blur(10px);
-        }
-        .glow-card:hover {
-            box-shadow: 0 0 25px rgba(45, 212, 191, 0.25);
-            border-color: rgba(45, 212, 191, 0.6);
-            transform: translateY(-6px);
-        }
-
-        /* 文字渐变高光 */
+        /* 渐变文字 */
         .text-gradient {
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-image: linear-gradient(to right, #2dd4bf, #34d399);
+            background-image: linear-gradient(135deg, #6366f1 0%, #d946ef 100%); /* Indigo to Fuchsia */
+        }
+
+        /* 优雅的卡片悬浮 */
+        .elegant-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .elegant-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #e2e8f0;
+        }
+
+        /* 滚动出现动画 */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* iOS风格分段控制器 (语言切换) */
+        .segment-control {
+            display: inline-flex;
+            background-color: #f1f5f9;
+            border-radius: 9999px;
+            padding: 4px;
+            position: relative;
+        }
+        .segment-btn {
+            position: relative;
+            z-index: 2;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .segment-btn.active { color: #0f172a; }
+        .segment-indicator {
+            position: absolute;
+            top: 4px; bottom: 4px;
+            background-color: white;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased flex flex-col lg:flex-row min-h-screen">
 
-    <nav class="sticky top-0 z-[999] bg-slate-900/80 backdrop-blur-md border-b border-slate-800 shadow-lg">
-        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-            <span data-i18n="nav_name" class="text-xl font-bold text-gradient tracking-wide">甘弦朋</span>
-            <div class="flex items-center space-x-4 md:space-x-6 text-sm font-medium">
-                <a href="#about" data-i18n="nav_about" class="hover:text-teal-400 transition hidden md:inline-block">关于我</a>
-                <a href="#research" data-i18n="nav_research" class="hover:text-teal-400 transition hidden md:inline-block">研究</a>
-                <a href="#projects" data-i18n="nav_projects" class="hover:text-teal-400 transition hidden md:inline-block">项目</a>
-                <a href="#contact" data-i18n="nav_contact" class="hover:text-teal-400 transition hidden md:inline-block">联系</a>
-                
-                <div class="flex items-center space-x-2 bg-slate-800/80 rounded-lg px-3 py-1.5 border border-slate-700 text-xs shadow-inner">
-                    <button onclick="updateLanguage('zh')" id="btn-zh" class="lang-btn text-teal-400 font-bold transition duration-200">中文</button>
-                    <span class="text-slate-600">|</span>
-                    <button onclick="updateLanguage('en')" id="btn-en" class="lang-btn text-slate-400 hover:text-teal-300 transition duration-200">EN</button>
-                    <span class="text-slate-600">|</span>
-                    <button onclick="updateLanguage('ja')" id="btn-ja" class="lang-btn text-slate-400 hover:text-teal-300 transition duration-200">JA</button>
-                </div>
-            </div>
+    <aside class="relative w-full lg:w-[35%] lg:fixed lg:h-screen border-r border-slate-200">
+        <div class="blob-bg hidden lg:block">
+            <div class="blob-1"></div>
+            <div class="blob-2"></div>
         </div>
-    </nav>
-
-    <header id="about" class="aurora-bg py-24 text-white relative z-10 border-b border-slate-800">
-        <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12 relative reveal">
-            <div class="w-44 h-44 rounded-full bg-slate-800/50 border-2 border-teal-400/50 p-1 shadow-[0_0_30px_rgba(45,212,191,0.3)] shrink-0">
-                <img src="gan.jpg" alt="GAN" class="w-full h-full object-cover rounded-full">
-            </div>
-            <div class="flex-1 text-center md:text-left">
-                <h1 data-i18n="hero_title" class="text-4xl md:text-5xl font-extrabold mb-4 text-white">你好，我是 <span class="text-gradient">[甘弦朋]</span></h1>
-                <p data-i18n="hero_desc" class="text-lg text-slate-300 mb-8 max-w-2xl leading-relaxed">
+        
+        <div class="glass-panel h-full flex flex-col justify-between p-8 md:p-12 lg:p-16">
+            <div>
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden shadow-2xl mb-8 border border-white/60 transform rotate-3 hover:rotate-0 transition duration-500">
+                    <img src="gan.jpg" alt="GAN" class="w-full h-full object-cover">
+                </div>
+                
+                <h1 data-i18n="hero_title" class="text-3xl md:text-4xl font-extrabold mb-6 tracking-tight text-slate-900">你好，我是 <span class="text-gradient">[甘弦朋]</span></h1>
+                <p data-i18n="hero_desc" class="text-slate-600 leading-relaxed mb-10 text-sm md:text-base">
                     目前专注于乐器表现（钢琴）的学科研究。我热衷于探索如何利用深度学习技术来理解和创造艺术。
                 </p>
-                <div class="flex justify-center md:justify-start gap-5">
-                    <a href="https://github.com" class="bg-slate-800 text-white border border-slate-600 px-6 py-2.5 rounded-full font-medium hover:bg-slate-700 hover:border-teal-400 transition-all shadow-lg flex items-center"><i class="fab fa-github mr-2"></i>GitHub</a>
-                    <a href="mailto:gan1020097573@gmail.com" class="bg-teal-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-teal-500 hover:shadow-[0_0_15px_rgba(45,212,191,0.5)] transition-all flex items-center"><i class="fas fa-envelope mr-2"></i>Email</a>
+
+                <nav class="hidden lg:flex flex-col space-y-4 mb-10 font-semibold text-sm">
+                    <a href="#research" class="text-slate-400 hover:text-indigo-600 transition flex items-center group"><span class="w-4 h-[2px] bg-slate-300 mr-3 group-hover:w-8 group-hover:bg-indigo-600 transition-all"></span> <span data-i18n="nav_research">研究</span></a>
+                    <a href="#publications" class="text-slate-400 hover:text-indigo-600 transition flex items-center group"><span class="w-4 h-[2px] bg-slate-300 mr-3 group-hover:w-8 group-hover:bg-indigo-600 transition-all"></span> <span data-i18n="pub_title">近期论文</span></a>
+                    <a href="#projects" class="text-slate-400 hover:text-indigo-600 transition flex items-center group"><span class="w-4 h-[2px] bg-slate-300 mr-3 group-hover:w-8 group-hover:bg-indigo-600 transition-all"></span> <span data-i18n="nav_projects">项目</span></a>
+                </nav>
+
+                <div class="flex gap-4">
+                    <a href="https://github.com" class="bg-slate-900 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-indigo-600 transition shadow-lg"><i class="fab fa-github"></i></a>
+                    <a href="mailto:gan1020097573@gmail.com" class="bg-white border border-slate-200 text-slate-700 w-10 h-10 rounded-full flex items-center justify-center hover:text-indigo-600 hover:border-indigo-200 transition shadow-sm"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+
+            <div class="mt-12 lg:mt-0">
+                <div class="segment-control" id="lang-switch-container">
+                    <div class="segment-indicator" id="segment-indicator"></div>
+                    <button class="segment-btn active" data-lang="zh">中文</button>
+                    <button class="segment-btn" data-lang="en">English</button>
+                    <button class="segment-btn" data-lang="ja">日本語</button>
                 </div>
             </div>
         </div>
-    </header>
+    </aside>
 
-    <main class="max-w-5xl mx-auto px-4 py-20 space-y-24">
+    <main class="w-full lg:w-[65%] lg:ml-[35%] p-8 md:p-16 lg:p-24 pb-32">
+        <div class="max-w-3xl mx-auto space-y-32">
 
-        <section id="research" class="reveal">
-            <div class="flex items-center mb-10">
-                <div class="w-2 h-8 bg-teal-500 rounded-full mr-4 shadow-[0_0_10px_rgba(45,212,191,0.5)]"></div>
-                <h2 data-i18n="research_title" class="text-3xl font-bold text-white">研究兴趣</h2>
-            </div>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glow-card p-8 rounded-2xl">
-                    <div class="w-14 h-14 bg-teal-900/50 text-teal-400 rounded-xl flex items-center justify-center mb-6 border border-teal-500/30">
-                        <i class="fas fa-music text-2xl"></i>
-                    </div>
-                    <h3 data-i18n="res1_title" class="font-bold text-xl mb-3 text-white">器乐表现（钢琴）研究</h3>
-                    <p data-i18n="res1_desc" class="text-slate-400 text-sm leading-relaxed">艺术实践与学术研究深度结合，致力于钢琴演奏艺术的精进，并从学术视角探索音乐诠释的理论逻辑与创新边界。</p>
-                </div>
-                <div class="glow-card p-8 rounded-2xl">
-                    <div class="w-14 h-14 bg-emerald-900/50 text-emerald-400 rounded-xl flex items-center justify-center mb-6 border border-emerald-500/30">
-                        <i class="fas fa-microchip text-2xl"></i>
-                    </div>
-                    <h3 data-i18n="res2_title" class="font-bold text-xl mb-3 text-white">作曲（乐书）研究</h3>
-                    <p data-i18n="res2_desc" class="text-slate-400 text-sm leading-relaxed">立足于作曲技法与乐谱文献，研究音乐结构的内在逻辑及其在当代技术环境下的生成机制。</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="publications" class="reveal">
-            <div class="flex items-center mb-10">
-                <div class="w-2 h-8 bg-emerald-500 rounded-full mr-4 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
-                <h2 data-i18n="pub_title" class="text-3xl font-bold text-white">近期论文</h2>
-            </div>
-            <div class="space-y-6">
-                <div class="p-6 glow-card rounded-xl flex flex-col items-start relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-teal-500"></div>
-                    <span data-i18n="pub_status" class="text-xs font-bold uppercase tracking-wider text-teal-300 px-3 py-1 bg-teal-900/40 border border-teal-500/30 rounded-full mb-3">审查中</span>
-                    <h3 class="font-bold text-lg text-white mb-2">[Invalid Noise Ratio: An Artifact-Aware Evaluation Metric for AI-Generated Chiptune Music]</h3>
-                    <p data-i18n="pub_desc" class="text-slate-400 text-sm">无效噪声比：一种面向 AI 生成芯片音乐的伪影感知评价指标.</p>
-                </div>
-
-                <div class="p-6 glow-card rounded-xl flex flex-col items-start relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
-                    <span data-i18n="pub2_status" class="text-xs font-bold uppercase tracking-wider text-emerald-300 px-3 py-1 bg-emerald-900/40 border border-emerald-500/30 rounded-full mb-3">已发表（校内）</span>
-                    <h3 class="font-bold text-lg text-white mb-2">["Public Glory" and "Private Monologue": Analysis and Interpretation of Two Piano Works by Mikhail Ivanovich Glinka]</h3>
-                    <p data-i18n="pub2_desc" class="text-slate-400 text-sm">「公的荣耀」与「私的独白」：米哈伊尔.伊万诺维奇.格林卡的二首钢琴作品分析与解读</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" class="reveal">
-            <div class="flex items-center mb-10">
-                <div class="w-2 h-8 bg-teal-500 rounded-full mr-4 shadow-[0_0_10px_rgba(45,212,191,0.5)]"></div>
-                <h2 data-i18n="projects_title" class="text-3xl font-bold text-white">近期专案</h2>
-            </div>
-            <div class="space-y-6">
-                <div class="p-6 glow-card rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div>
-                        <h3 class="font-bold text-xl text-white flex items-center gap-2" data-i18n="proj1_title">柔情趁年少</h3>
-                        <p class="text-sm text-slate-400 mt-2" data-i18n="proj1_roles">作词：张哲凯 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋</p>
-                        <p class="text-teal-400 text-sm mt-3 italic" data-i18n="proj1_desc">“尽管聚散与成长都是常道”</p>
-                    </div>
-                    <button disabled class="shrink-0 px-8 py-2 bg-slate-800 text-slate-500 rounded-full cursor-not-allowed font-medium text-sm border border-slate-700" data-i18n="btn_listen">试听</button>
-                </div>
-
-                <div class="p-6 glow-card rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div>
-                        <h3 class="font-bold text-xl text-white flex items-center gap-2" data-i18n="proj2_title">呢喃</h3>
-                        <p class="text-sm text-slate-400 mt-2" data-i18n="proj2_roles">作词：舒彦童 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋</p>
-                        <p class="text-teal-400 text-sm mt-3 italic" data-i18n="proj2_desc">“泛黄的相册与漫天的落叶”</p>
-                    </div>
-                    <button disabled class="shrink-0 px-8 py-2 bg-slate-800 text-slate-500 rounded-full cursor-not-allowed font-medium text-sm border border-slate-700" data-i18n="btn_listen">试听</button>
-                </div>
-
-                <div id="hidden-project" class="hidden">
-                    <div class="p-6 glow-card rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div>
-                            <h3 class="font-bold text-xl text-white flex items-center gap-2" data-i18n="proj3_title">孤独盆栽</h3>
-                            <p class="text-sm text-slate-400 mt-2" data-i18n="proj3_roles">作词：任乔洛 | 作曲：任乔洛 | 编曲：甘弦朋 | 制作人：钟其高</p>
-                            <p class="text-teal-400 text-sm mt-3 italic" data-i18n="proj3_desc">“困于方寸，向光而生。无人问津，独自盛放”</p>
+            <section id="research" class="reveal-item pt-8 lg:pt-0">
+                <h2 data-i18n="research_title" class="text-2xl font-extrabold text-slate-900 mb-10 tracking-tight">研究兴趣</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="elegant-card p-8 rounded-3xl">
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-music text-xl"></i>
                         </div>
-                        <button disabled class="shrink-0 px-8 py-2 bg-slate-800 text-slate-500 rounded-full cursor-not-allowed font-medium text-sm border border-slate-700" data-i18n="btn_listen">试听</button>
+                        <h3 data-i18n="res1_title" class="font-bold text-lg mb-3 text-slate-800">器乐表现（钢琴）研究</h3>
+                        <p data-i18n="res1_desc" class="text-slate-500 text-sm leading-relaxed">艺术实践与学术研究深度结合，致力于钢琴演奏艺术的精进，并从学术视角探索音乐诠释的理论逻辑与创新边界。</p>
+                    </div>
+                    <div class="elegant-card p-8 rounded-3xl">
+                        <div class="w-12 h-12 bg-fuchsia-50 text-fuchsia-500 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-microchip text-xl"></i>
+                        </div>
+                        <h3 data-i18n="res2_title" class="font-bold text-lg mb-3 text-slate-800">作曲（乐书）研究</h3>
+                        <p data-i18n="res2_desc" class="text-slate-500 text-sm leading-relaxed">立足于作曲技法与乐谱文献，研究音乐结构的内在逻辑及其在当代技术环境下的生成机制。</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="mt-8 text-center">
-                <button id="show-more-btn" class="px-8 py-2.5 bg-transparent border border-teal-500/50 text-teal-400 rounded-full hover:bg-teal-500/10 hover:border-teal-400 transition-all font-medium text-sm" data-i18n="btn_show_more">显示更多</button>
-            </div>
-        </section>
+            <section id="publications" class="reveal-item">
+                <h2 data-i18n="pub_title" class="text-2xl font-extrabold text-slate-900 mb-10 tracking-tight">近期论文</h2>
+                <div class="space-y-6">
+                    <div class="elegant-card p-8 rounded-3xl">
+                        <span data-i18n="pub_status" class="inline-block text-[10px] font-bold uppercase tracking-widest text-indigo-600 px-3 py-1 bg-indigo-50 rounded-full mb-4">审查中</span>
+                        <h3 class="font-bold text-lg text-slate-900 mb-3 leading-snug">[Invalid Noise Ratio: An Artifact-Aware Evaluation Metric for AI-Generated Chiptune Music]</h3>
+                        <p data-i18n="pub_desc" class="text-slate-500 text-sm">无效噪声比：一种面向 AI 生成芯片音乐的伪影感知评价指标.</p>
+                    </div>
 
+                    <div class="elegant-card p-8 rounded-3xl">
+                        <span data-i18n="pub2_status" class="inline-block text-[10px] font-bold uppercase tracking-widest text-emerald-600 px-3 py-1 bg-emerald-50 rounded-full mb-4">已发表（校内）</span>
+                        <h3 class="font-bold text-lg text-slate-900 mb-3 leading-snug">["Public Glory" and "Private Monologue": Analysis and Interpretation of Two Piano Works by Mikhail Ivanovich Glinka]</h3>
+                        <p data-i18n="pub2_desc" class="text-slate-500 text-sm">「公的荣耀」与「私的独白」：米哈伊尔.伊万诺维奇.格林卡的二首钢琴作品分析与解读</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects" class="reveal-item">
+                <h2 data-i18n="projects_title" class="text-2xl font-extrabold text-slate-900 mb-10 tracking-tight">近期专案</h2>
+                <div class="space-y-6">
+                    <div class="elegant-card p-8 rounded-3xl flex flex-col sm:flex-row sm:items-start justify-between gap-6">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900" data-i18n="proj1_title">柔情趁年少</h3>
+                            <p class="text-xs text-slate-400 mt-2 font-medium" data-i18n="proj1_roles">作词：张哲凯 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋</p>
+                            <p class="text-indigo-500 text-sm mt-3 italic" data-i18n="proj1_desc">“尽管聚散与成长都是常道”</p>
+                        </div>
+                        <button disabled class="shrink-0 px-6 py-2 bg-slate-100 text-slate-400 rounded-full cursor-not-allowed font-semibold text-xs tracking-wide" data-i18n="btn_listen">试听</button>
+                    </div>
+
+                    <div class="elegant-card p-8 rounded-3xl flex flex-col sm:flex-row sm:items-start justify-between gap-6">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900" data-i18n="proj2_title">呢喃</h3>
+                            <p class="text-xs text-slate-400 mt-2 font-medium" data-i18n="proj2_roles">作词：舒彦童 | 作曲：甘弦朋 | 编曲：甘弦朋 | 制作人：甘弦朋</p>
+                            <p class="text-indigo-500 text-sm mt-3 italic" data-i18n="proj2_desc">“泛黄的相册与漫天的落叶”</p>
+                        </div>
+                        <button disabled class="shrink-0 px-6 py-2 bg-slate-100 text-slate-400 rounded-full cursor-not-allowed font-semibold text-xs tracking-wide" data-i18n="btn_listen">试听</button>
+                    </div>
+
+                    <div id="hidden-project" class="hidden">
+                        <div class="elegant-card p-8 rounded-3xl flex flex-col sm:flex-row sm:items-start justify-between gap-6 reveal-item">
+                            <div>
+                                <h3 class="font-bold text-lg text-slate-900" data-i18n="proj3_title">孤独盆栽</h3>
+                                <p class="text-xs text-slate-400 mt-2 font-medium" data-i18n="proj3_roles">作词：任乔洛 | 作曲：任乔洛 | 编曲：甘弦朋 | 制作人：钟其高</p>
+                                <p class="text-indigo-500 text-sm mt-3 italic" data-i18n="proj3_desc">“困于方寸，向光而生。无人问津，独自盛放”</p>
+                            </div>
+                            <button disabled class="shrink-0 px-6 py-2 bg-slate-100 text-slate-400 rounded-full cursor-not-allowed font-semibold text-xs tracking-wide" data-i18n="btn_listen">试听</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-10">
+                    <button id="show-more-btn" class="flex items-center text-sm font-semibold text-indigo-600 hover:text-fuchsia-500 transition-colors group">
+                        <span data-i18n="btn_show_more">显示更多</span>
+                        <i class="fas fa-arrow-down ml-2 group-hover:translate-y-1 transition-transform"></i>
+                    </button>
+                </div>
+            </section>
+            
+            <footer id="contact" class="pt-20 border-t border-slate-200">
+                <p data-i18n="footer_text" class="text-slate-400 text-sm">© 2026 [甘弦朋]. 基于 GitHub Pages 构建.</p>
+            </footer>
+        </div>
     </main>
 
-    <footer id="contact" class="bg-[#020617] text-white py-12 text-center border-t border-slate-800">
-        <p data-i18n="footer_text" class="text-slate-500 mb-6 text-sm">© 2026 [甘弦朋]. 基于 GitHub Pages 构建.</p>
-        <div class="flex justify-center gap-8">
-            <a href="#" class="text-slate-500 hover:text-teal-400 transition text-2xl hover:scale-110 transform"><i class="fab fa-linkedin"></i></a>
-            <a href="#" class="text-slate-500 hover:text-teal-400 transition text-2xl hover:scale-110 transform"><i class="fab fa-twitter"></i></a>
-        </div>
-    </footer>
-
     <script>
-        // ======= 滚动视差展示 (Scroll Reveal) 逻辑 =======
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal();
-        // ===================================
-
+        // ======= 翻译数据 =======
         const translations = {
             zh: {
                 page_title: "甘弦朋 | 个人主页",
@@ -277,7 +316,7 @@
                 proj2_desc: "“Yellowing photo albums and falling leaves”",
                 proj3_title: "Lonely Potted Plant",
                 proj3_roles: "Lyricist: Ren Qiaoluo | Composer: Ren Qiaoluo | Arranger: Gan Xianpeng | Producer: Zhong Qigao",
-                proj3_desc: "“Trapped in a square inch, growing towards the light,unnoticed and blooming alone.”",
+                proj3_desc: "“Trapped in a square inch, growing towards the light, unnoticed and blooming alone.”",
                 btn_listen: "Listen",
                 btn_show_more: "Show More",
                 footer_text: "© 2026 [Gan Xianpeng]. Built with GitHub Pages."
@@ -317,9 +356,11 @@
             }
         };
 
-        // 处理新版的按钮式语言切换逻辑
+        // ======= 多语言及控件动画逻辑 =======
+        const btns = document.querySelectorAll('.segment-btn');
+        const indicator = document.getElementById('segment-indicator');
+
         function updateLanguage(lang) {
-            // 更新文本
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) {
@@ -327,19 +368,27 @@
                 }
             });
             document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
-
-            // 更新按钮激活状态的样式
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('text-teal-400', 'font-bold');
-                btn.classList.add('text-slate-400');
-            });
-            const activeBtn = document.getElementById('btn-' + lang);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-slate-400');
-                activeBtn.classList.add('text-teal-400', 'font-bold');
-            }
         }
 
+        function setIndicator(btn) {
+            indicator.style.width = `${btn.offsetWidth}px`;
+            indicator.style.left = `${btn.offsetLeft}px`;
+        }
+
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                btns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                setIndicator(e.target);
+                updateLanguage(e.target.getAttribute('data-lang'));
+            });
+        });
+
+        // 初始化指示器位置
+        window.addEventListener('load', () => setIndicator(document.querySelector('.segment-btn.active')));
+        window.addEventListener('resize', () => setIndicator(document.querySelector('.segment-btn.active')));
+
+        // ======= 显示更多逻辑 =======
         const showMoreBtn = document.getElementById('show-more-btn');
         const hiddenProject = document.getElementById('hidden-project');
         
@@ -347,9 +396,27 @@
             showMoreBtn.addEventListener('click', () => {
                 hiddenProject.classList.remove('hidden');
                 showMoreBtn.style.display = 'none';
-                setTimeout(() => { reveal(); }, 50);
+                // 延迟触发动画
+                setTimeout(() => {
+                    hiddenProject.querySelector('.reveal-item').classList.add('is-visible');
+                }, 50);
             });
         }
+
+        // ======= 滚动视差出现 (Scroll Reveal) =======
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // 可选：如果只想动画一次，可以取消观察
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-item').forEach(el => {
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
