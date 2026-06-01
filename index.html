@@ -167,7 +167,7 @@
     </div>
     <div class="flex items-center gap-2 text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-4 py-2 rounded-xl w-fit">
         <span>❓</span>
-        <span>放音频文件</span>
+        <span>更改韩一可</span>
     </div>
 </div>
 
@@ -247,7 +247,7 @@
                             <p class="text-xs text-slate-400 mt-2 font-medium" data-i18n="proj1_roles">作词：任乔洛 | 作曲：任乔洛 | 编曲：任乔洛 | 制作人：任乔洛</p>
                             <p class="text-indigo-500 text-sm mt-3 italic" data-i18n="proj1_desc">“沉溺痛苦，是因为痛苦能让人感受到存在的意义”</p>
                         </div>
-                        <button class="audio-btn shrink-0 px-6 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-full cursor-pointer font-semibold text-xs tracking-wide transition-colors" data-audio-src="audio1.mp3" data-i18n="btn_listen">试听</button>
+                        <button class="audio-btn shrink-0 px-6 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-full cursor-pointer font-semibold text-xs tracking-wide transition-colors" data-audio-src="./music/zijiu.mp3" data-i18n="btn_listen">试听</button>
                     </div>
 
                     <div class="elegant-card p-8 rounded-3xl flex flex-col sm:flex-row sm:items-start justify-between gap-6">
@@ -256,7 +256,7 @@
                             <p class="text-xs text-slate-400 mt-2 font-medium" data-i18n="proj2_roles">作词：任乔洛 | 作曲：任乔洛 | 编曲：任乔洛 | 制作人：任乔洛</p>
                             <p class="text-indigo-500 text-sm mt-3 italic" data-i18n="proj2_desc">“母女间的代际创伤和爱像一场下不完的雨”</p>
                         </div>
-                        <button class="audio-btn shrink-0 px-6 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-full cursor-pointer font-semibold text-xs tracking-wide transition-colors" data-audio-src="audio2.mp3" data-i18n="btn_listen">试听</button>
+                        <button class="audio-btn shrink-0 px-6 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-full cursor-pointer font-semibold text-xs tracking-wide transition-colors" data-audio-src="./music/muzhi.mp3" data-i18n="btn_listen">试听</button>
                     </div>
 
                     <div id="hidden-project" class="hidden">
@@ -266,7 +266,7 @@
                                 <p class="text-xs text-slate-400 mt-2 font-medium" data-i18n="proj3_roles">作词：任乔洛 | 作曲：任乔洛 | 编曲：甘弦朋 | 制作人：钟其高</p>
                                 <p class="text-indigo-500 text-sm mt-3 italic" data-i18n="proj3_desc">“谁都无法永远成为多数派，要找到自己微观的幸福”</p>
                             </div>
-                            <button class="audio-btn shrink-0 px-6 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-full cursor-pointer font-semibold text-xs tracking-wide transition-colors" data-audio-src="audio3.mp3" data-i18n="btn_listen">试听</button>
+                            <button class="audio-btn shrink-0 px-6 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-full cursor-pointer font-semibold text-xs tracking-wide transition-colors" data-audio-src="./music/gudu.mp3" data-i18n="btn_listen">试听</button>
                         </div>
                     </div>
                 </div>
@@ -527,12 +527,6 @@
         document.querySelectorAll('.audio-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const audioSrc = this.getAttribute('data-audio-src');
-                
-                // 简单的提示：防止由于尚未配置路径而报错
-                if (audioSrc.includes('.mp3') && audioSrc.startsWith('audio')) {
-                    alert('稍等一下，还没准备好音频文件，你先看看别的');
-                    return;
-                }
 
                 // 如果点击的是当前正在播放的音频，则暂停
                 if (currentAudio && currentBtn === this && !currentAudio.paused) {
